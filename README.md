@@ -1,2 +1,2 @@
-# stopwatch-devsummit-2015
-Stopwatch demo files for Esri's International Developer's Summit, 2015.
+# Stopwatch Demo
+These demonstration files are resources of the Modular JavaScript session to be presented at Esri International Developers Summit, 2015.
