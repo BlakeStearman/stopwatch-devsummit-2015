@@ -1,0 +1,19 @@
+.Stopwatch #timer {
+  font-size: 48pt;
+  color: #555;
+}
+
+.Stopwatch button {
+  background-color: transparent;
+  color: #555;
+  border: 0.25em solid #999;
+  border-radius: 1em;
+  outline: none;
+  padding: 0.5em 1em;
+  font-size: 16pt;
+}
+
+.Stopwatch button:hover {
+  color: #FF8C00;
+  border-color: #FF8C00;
+}

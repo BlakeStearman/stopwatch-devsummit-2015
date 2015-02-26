@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Stopwatch</title>
+
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+  <div class="display">
+    <div id="timer">00:00:00:000</div>
+    <button type="button" id="start-button">Start</button>
+    <button type="button" id="stop-button">Stop</button>
+  </div>
+
+  <script src="./js/stopwatch.js"></script>
+  <script>
+    var displayInterval,
+        displayNode = document.getElementById("timer"),
+        startTime,
+        stopTime,
+        totalTime = 0;
+
+    // functions
+    function started() {
+      return !!(startTime);
+    }
+
+    function stopped() {
+      return !!(stopTime);
+    }
+
+    function reset() {
+      startTime = null;
+      stopTime = null;
+      totalTime = 0;
+    }
+
+    function start() {
+      if(!started()) {
+        stopTime = null;
+        startTime = Date.now();
+      }
+    }
+
+    function stop() {
+      if(started()) {
+        stopTime = Date.now();
+        totalTime += (stopTime - startTime);
+        startTime = null;
+      }
+    }
+
+    function time() {
+      return stopped() ? totalTime : (started() ? (totalTime + (Date.now() - startTime)) : 0);
+    }
+
+    function displayTime() {
+      var totalTime = time() || 0,
+          milliseconds = parseInt(totalTime % 1000),
+          seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
+          minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
+          hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24),
+          times = [hours, minutes, seconds, milliseconds];
+      return (times[0] < 10 ? "0" + times[0] : times[0]) + ":" +
+          (times[1] < 10 ? "0" + times[1] : times[1]) + ":" +
+          (times[2] < 10 ? "0" + times[2] : times[2]) + ":" +
+          (times[3] < 10 ? "00" + times[3] : (times[3] < 100 ? "0" + times[3] : times[3]));
+    }
+
+    // connect buttons
+    document.getElementById("start-button").addEventListener("click", function() {
+      start();
+      if(!displayInterval) {
+        displayInterval = setInterval(function() {
+          displayNode.innerHTML = displayTime();
+        }, 25);
+      }
+    });
+    document.getElementById("stop-button").addEventListener("click", function() {
+      if(started()) {
+        stop();
+      } else if(stopped()) {
+        reset();
+        clearInterval(displayInterval);
+        displayInterval = null;
+        displayNode.innerHTML = displayTime();
+      }
+    });
+  </script>
+</body>
+</html>

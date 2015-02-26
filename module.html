@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Stopwatch</title>
+
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+  <div class="display">
+    <div id="timer">00:00:00:000</div>
+    <button type="button" id="start-button">Start</button>
+    <button type="button" id="stop-button">Stop</button>
+  </div>
+
+  <script src="./js/stopwatch.js"></script>
+  <script>
+    var displayInterval,
+        displayNode = document.getElementById("timer");
+
+    if(Stopwatch) {
+      // connect buttons
+      document.getElementById("start-button").addEventListener("click", function() {
+        Stopwatch.start();
+        if(!displayInterval) {
+          displayInterval = setInterval(function() {
+            displayNode.innerHTML = Stopwatch.displayTime();
+          }, 25);
+        }
+      });
+      document.getElementById("stop-button").addEventListener("click", function() {
+        if(Stopwatch.started()) {
+          Stopwatch.stop();
+        } else {
+          Stopwatch.reset();
+          if(displayInterval) {
+            clearInterval(displayInterval);
+            displayInterval = null;
+          }
+          displayNode.innerHTML = Stopwatch.displayTime();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
