@@ -13,11 +13,19 @@ define([
     baseClass: "Stopwatch",
     templateString: template,
 
-    displayInterval: null,
-    startTime: null,
-    stopTime: null,
-    totalTime: 0,
-    updateInterval: 25, // ms
+    _displayInterval: null,
+    _startTime: 0,
+    _stopTime: 0,
+    _running: false,
+
+    // ctor options
+    updateInterval: 25, // time in ms
+
+    constructor: function(options) {
+      this.inherited(arguments);
+
+      this.updateInterval = options.updateInterval || 25;
+    },
 
     postCreate: function() {
       this.inherited(arguments);
@@ -29,79 +37,86 @@ define([
       );
     },
 
-    startup: function() {
-      this.inherited(arguments);
+    isRunning: function() {
+      return this._running;
     },
 
-    destroy: function() {
-      this.inherited(arguments);
+    reset: function() {
+      this._startTime = 0;
+      this._stopTime = 0;
     },
 
     start: function() {
-      if(!this.started()) {
-        this.stopTime = null;
-        this.startTime = Date.now();
+      if(!this.isRunning()) {
+        this._running = true;
+
+        if(this._startTime === 0) {
+          this._startTime = Date.now();
+        }
       }
     },
 
     stop: function() {
-      if(this.started()) {
-        this.stopTime = Date.now();
-        this.totalTime += (this.stopTime - this.startTime);
-        this.startTime = null;
+      if(this.isRunning()) {
+        this._running = false;
+        this._stopTime = Date.now();
       }
     },
 
-    time: function() {
-      return this.stopped() ? this.totalTime : (this.started() ? (this.totalTime + (Date.now() - this.startTime)) : 0);
-    },
-
     displayTime: function() {
-      var totalTime = this.time() || 0,
-        milliseconds = parseInt(totalTime % 1000),
-        seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
-        minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
-        hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24),
-        times = [hours, minutes, seconds, milliseconds];
-      return (times[0] < 10 ? "0" + times[0] : times[0]) + ":" +
-        (times[1] < 10 ? "0" + times[1] : times[1]) + ":" +
-        (times[2] < 10 ? "0" + times[2] : times[2]) + ":" +
-        (times[3] < 10 ? "00" + times[3] : (times[3] < 100 ? "0" + times[3] : times[3]));
+      var totalTime = this._time() || 0,
+          milliseconds = parseInt(totalTime % 1000),
+          seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
+          minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
+          hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
+      return this._padWithZeros(hours, 2) + ":" +
+             this._padWithZeros(minutes, 2) + ":" +
+             this._padWithZeros(seconds, 2) + ":" +
+             this._padWithZeros(milliseconds, 3);
     },
 
-    started: function() {
-      return !!(this.startTime);
-    },
-
-    stopped: function() {
-      return !!(this.stopTime);
-    },
-
-    reset: function() {
-      this.startTime = null;
-      this.stopTime = null;
-      this.totalTime = 0;
+    _time: function() {
+      var finalTime = this.isRunning() ? Date.now() : this._stopTime;
+      return finalTime - this._startTime;
     },
 
     _updateDisplay: function() {
       domAttr.set(this._displayNode, "innerHTML", this.displayTime());
     },
 
+    _padWithZeros: function(number, upTo) {
+      var numberText = number.toString(),
+          totalChars = numberText.length,
+          zerosNeeded;
+
+      if(totalChars >= upTo) {
+        return numberText;
+      }
+
+      zerosNeeded = upTo - totalChars;
+
+      for(var i = 0; i < zerosNeeded; i++) {
+        numberText = "0" + numberText;
+      }
+
+      return numberText;
+    },
+
     _onStart: function() {
       this.start();
-      if(!this.displayInterval) {
-        this.displayInterval = setInterval(lang.hitch(this, this._updateDisplay), this.updateInterval);
+      if(!this._displayInterval) {
+        this._displayInterval = setInterval(lang.hitch(this, this._updateDisplay), this.updateInterval);
       }
     },
 
     _onStop: function() {
-      if(this.started()) {
+      if(this.isRunning()) {
         this.stop();
       } else {
         this.reset();
-        if(this.displayInterval) {
-          clearInterval(this.displayInterval);
-          this.displayInterval = null;
+        if(this._displayInterval) {
+          clearInterval(this._displayInterval);
+          this._displayInterval = null;
         }
         this._updateDisplay();
       }

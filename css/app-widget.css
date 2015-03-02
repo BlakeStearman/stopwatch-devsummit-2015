@@ -27,12 +27,12 @@ a.option {
 
 a.option:hover {
   color: #FF8C00;
-  text-decoration: underline;
+  font-weight: bolder;
 }
 
 a.option:before {
-  content: "«";
+  content: " «";
 }
 a.option:after {
-  content: "»";
+  content: "» ";
 }

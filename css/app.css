@@ -28,17 +28,18 @@ a.option {
 
 a.option:hover {
   color: #FF8C00;
-  text-decoration: underline;
+  font-weight: bolder;
 }
 
 a.option:before {
-  content: "«";
+  content: " «";
 }
 a.option:after {
-  content: "»";
+  content: "» ";
 }
 
 button {
+  cursor: pointer;
   background-color: transparent;
   color: #555;
   border: 0.25em solid #999;
@@ -46,9 +47,15 @@ button {
   outline: none;
   padding: 0.5em 1em;
   font-size: 16pt;
+  width: 100px;
 }
 
 button:hover {
   color: #FF8C00;
   border-color: #FF8C00;
+}
+
+button:active {
+  color: #E57E00;
+  border-color: #E57E00;
 }

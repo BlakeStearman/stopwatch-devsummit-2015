@@ -17,42 +17,41 @@
   <script>
     var displayInterval,
         displayNode = document.getElementById("timer"),
-        startTime,
-        stopTime,
-        totalTime = 0;
+        startTime = 0,
+        stopTime = 0,
+        running = false;
 
     // functions
-    function started() {
-      return !!(startTime);
-    }
-
-    function stopped() {
-      return !!(stopTime);
+    function isRunning() {
+      return running;
     }
 
     function reset() {
-      startTime = null;
-      stopTime = null;
-      totalTime = 0;
+      startTime = 0;
+      stopTime = 0;
     }
 
     function start() {
-      if(!started()) {
-        stopTime = null;
-        startTime = Date.now();
+      if(!isRunning()) {
+        running = true;
+
+        if(startTime === 0) {
+          startTime = Date.now();
+        }
+
       }
     }
 
     function stop() {
-      if(started()) {
+      if(isRunning()) {
+        running = false;
         stopTime = Date.now();
-        totalTime += (stopTime - startTime);
-        startTime = null;
       }
     }
 
     function time() {
-      return stopped() ? totalTime : (started() ? (totalTime + (Date.now() - startTime)) : 0);
+      var finalTime = isRunning() ? Date.now() : stopTime;
+      return finalTime - startTime;
     }
 
     function displayTime() {
@@ -60,12 +59,29 @@
           milliseconds = parseInt(totalTime % 1000),
           seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
           minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
-          hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24),
-          times = [hours, minutes, seconds, milliseconds];
-      return (times[0] < 10 ? "0" + times[0] : times[0]) + ":" +
-          (times[1] < 10 ? "0" + times[1] : times[1]) + ":" +
-          (times[2] < 10 ? "0" + times[2] : times[2]) + ":" +
-          (times[3] < 10 ? "00" + times[3] : (times[3] < 100 ? "0" + times[3] : times[3]));
+          hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
+      return padWithZeros(hours, 2) + ":" +
+             padWithZeros(minutes, 2) + ":" +
+             padWithZeros(seconds, 2) + ":" +
+             padWithZeros(milliseconds, 3);
+    }
+
+    function padWithZeros(number, upTo) {
+      var numberText = number.toString(),
+          totalChars = numberText.length,
+          zerosNeeded;
+
+      if(totalChars >= upTo) {
+        return numberText;
+      }
+
+      zerosNeeded = upTo - totalChars;
+
+      for(var i = 0; i < zerosNeeded; i++) {
+        numberText = "0" + numberText;
+      }
+
+      return numberText;
     }
 
     // connect buttons
@@ -78,9 +94,9 @@
       }
     });
     document.getElementById("stop-button").addEventListener("click", function() {
-      if(started()) {
+      if(isRunning()) {
         stop();
-      } else if(stopped()) {
+      } else {
         reset();
         clearInterval(displayInterval);
         displayInterval = null;

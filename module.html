@@ -29,7 +29,7 @@
         }
       });
       document.getElementById("stop-button").addEventListener("click", function() {
-        if(Stopwatch.started()) {
+        if(Stopwatch.isRunning()) {
           Stopwatch.stop();
         } else {
           Stopwatch.reset();
