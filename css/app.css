@@ -9,6 +9,23 @@ body {
   vertical-align: middle;
 }
 
+.nav {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  color: #555;
+}
+
+.nav a {
+  font-size: 12pt;
+  color: #555;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: #FF8C00;
+}
+
 .display {
   margin: 0 auto;
   text-align: center;
@@ -32,10 +49,10 @@ a.option:hover {
 }
 
 a.option:before {
-  content: " «";
+  content: " [";
 }
 a.option:after {
-  content: "» ";
+  content: "] ";
 }
 
 button {
@@ -47,7 +64,7 @@ button {
   outline: none;
   padding: 0.5em 1em;
   font-size: 16pt;
-  width: 100px;
+  min-width: 100px;
 }
 
 button:hover {

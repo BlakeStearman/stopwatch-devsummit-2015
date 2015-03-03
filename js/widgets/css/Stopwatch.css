@@ -4,6 +4,7 @@
 }
 
 .Stopwatch button {
+  cursor: pointer;
   background-color: transparent;
   color: #555;
   border: 0.25em solid #999;
@@ -11,9 +12,15 @@
   outline: none;
   padding: 0.5em 1em;
   font-size: 16pt;
+  min-width: 100px;
 }
 
 .Stopwatch button:hover {
   color: #FF8C00;
   border-color: #FF8C00;
+}
+
+.Stopwatch button:active {
+  color: #E57E00;
+  border-color: #E57E00;
 }

@@ -2,11 +2,11 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Stopwatch</title>
+  <title>Countdown</title>
 
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dijit/themes/claro/claro.css">
   <link rel="stylesheet" href="./css/app-widget.css">
-  <link rel="stylesheet" href="./js/widgets/css/Stopwatch.css">
+  <link rel="stylesheet" href="js/widgets/css/Countdown.css">
 
   <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dojo/dojo.js"
           data-dojo-config="
@@ -18,13 +18,13 @@
 </head>
 <body>
   <div class="nav">
-    <a href="./index.html">< Back</a> | Stopwatch Dojo widget
+    <a href="./index.html">< Back</a> | Countdown
   </div>
 
-  <div class="display" id="stopwatch" data-dojo-type="widgets/Stopwatch"></div>
+  <div class="display" id="countdown" data-dojo-type="widgets/Countdown" data-dojo-props="goalTime:10"></div>
 
   <script>
-    require(["dojo/parser", "widgets/Stopwatch", "dojo/domReady!"], function(parser) {
+    require(["dojo/parser", "widgets/Countdown", "dojo/domReady!"], function(parser) {
       parser.parse();
     });
   </script>
