@@ -5,7 +5,6 @@ define([
   "dijit/_WidgetBase",
 
   "dojo/_base/declare",
-  "dojo/_base/lang",
   "dojo/dom",
   "dojo/dom-attr",
   "dojo/dom-class",
@@ -16,7 +15,7 @@ define([
 ], function(
   _StopwatchMixin,
   _TemplatedMixin, _WidgetBase,
-  declare, lang, dom, domAttr, domClass, domStyle, on,
+  declare, dom, domAttr, domClass, domStyle, on,
   template
 ) {
 
@@ -35,8 +34,6 @@ define([
     updateInterval: 100, // time in ms
 
     constructor: function(options) {
-      this.inherited(arguments);
-
       // ensure proper types
       this.goalTime = parseInt(options.goalTime) || this._defaultTime; // default to 10 seconds
       this.updateInterval = parseInt(options.updateInterval) || 100;   // default to 100 ms
@@ -47,7 +44,7 @@ define([
 
       // connect button handlers
       this.own(
-        on(this._countdownButton, "click", lang.hitch(this, this._countdownClicked))
+        on(this._countdownButton, "click", this._countdownClicked.bind(this))
       );
     },
 
@@ -97,7 +94,7 @@ define([
       this.start();
       domStyle.set(dom.byId("countdown-button"), "visibility", "hidden");
       if(!this._displayInterval) {
-        this._displayInterval = setInterval(lang.hitch(this, this._updateDisplay), this.updateInterval);
+        this._displayInterval = setInterval(this._updateDisplay.bind(this));
       }
     },
 

@@ -5,7 +5,6 @@ define([
   "dijit/_WidgetBase",
 
   "dojo/_base/declare",
-  "dojo/_base/lang",
   "dojo/dom-attr",
   "dojo/on",
 
@@ -13,7 +12,7 @@ define([
 ], function(
   _StopwatchMixin,
   _TemplatedMixin, _WidgetBase,
-  declare, lang, domAttr, on,
+  declare, domAttr, on,
   template
 ) {
 
@@ -29,8 +28,6 @@ define([
     updateInterval: 25, // time in ms
 
     constructor: function(options) {
-      this.inherited(arguments);
-
       this.updateInterval = options.updateInterval || 25;
     },
 
@@ -39,8 +36,8 @@ define([
 
       // connect button handlers
       this.own(
-        on(this._startButton, "click", lang.hitch(this, this._onStart)),
-        on(this._stopButton, "click", lang.hitch(this, this._onStop))
+        on(this._startButton, "click", this._onStart.bind(this)),
+        on(this._stopButton, "click", this._onStop.bind(this))
       );
     },
 
@@ -51,7 +48,7 @@ define([
     _onStart: function() {
       this.start();
       if(!this._displayInterval) {
-        this._displayInterval = setInterval(lang.hitch(this, this._updateDisplay), this.updateInterval);
+        this._displayInterval = setInterval(this._updateDisplay.bind(this));
       }
     },
 
