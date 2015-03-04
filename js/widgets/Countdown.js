@@ -59,7 +59,7 @@ define([
 
     displayTime: function() {
       // calculate seconds left
-      return Math.round((this.goalTime || this._defaultTime) - (this.rawTime() / 1000));
+      return Math.round(this.goalTime - (this.rawTime() / 1000));
     },
 
     reset: function() {
