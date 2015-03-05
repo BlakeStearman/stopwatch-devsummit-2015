@@ -19,10 +19,7 @@ define(["dojo/_base/declare"], function (declare) {
   function start () {
     if (!_running) {
       _running = true;
-
-      if (_startTime === 0) {
-        _startTime = Date.now();
-      }
+      _startTime = _startTime + Date.now() - _stopTime;
     }
   }
 
@@ -35,7 +32,6 @@ define(["dojo/_base/declare"], function (declare) {
 
   function time () {
     var finalTime = _running ? Date.now() : _stopTime;
-
     return finalTime - _startTime;
   }
 
@@ -72,7 +68,6 @@ define(["dojo/_base/declare"], function (declare) {
 
   // module API
   var StopwatchAPI = {
-
     declaredClass: "widgets._StopwatchMixin",
 
     isRunning: isRunning,

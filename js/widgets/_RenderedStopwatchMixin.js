@@ -97,15 +97,12 @@ define([
 
       postCreate: function () {
         this.inherited(arguments);
-
         this._render();
-
         on(window.global, "resize", this._updateCanvasSize.bind(this));
       },
 
       _updateDisplay: function () {
         this.inherited(arguments);
-
         this._render();
       }
     });

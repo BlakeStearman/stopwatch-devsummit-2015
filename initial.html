@@ -18,94 +18,102 @@
   </div>
 
   <script>
-    var displayInterval,
-        displayNode = document.getElementById("timer"),
+    var displayNode = document.getElementById("timer"),
         startTime = 0,
         stopTime = 0,
-        running = false;
+        running = false,
+        displayInterval;
 
-    // functions
-    function isRunning() {
+    function isRunning () {
       return running;
     }
 
-    function reset() {
+    function reset () {
       startTime = 0;
       stopTime = 0;
     }
 
-    function start() {
-      if(!isRunning()) {
+    function start () {
+      if (!isRunning()) {
         running = true;
-
-        if(startTime === 0) {
-          startTime = Date.now();
-        }
-
+        startTime = startTime + Date.now() - stopTime;
       }
     }
 
-    function stop() {
-      if(isRunning()) {
+    function stop () {
+      if (isRunning()) {
         running = false;
         stopTime = Date.now();
       }
     }
 
-    function time() {
+    function time () {
       var finalTime = isRunning() ? Date.now() : stopTime;
       return finalTime - startTime;
     }
 
-    function displayTime() {
+    function displayTime () {
       var totalTime = time() || 0,
           milliseconds = parseInt(totalTime % 1000),
           seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
           minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
           hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
+
       return padWithZeros(hours, 2) + ":" +
              padWithZeros(minutes, 2) + ":" +
              padWithZeros(seconds, 2) + ":" +
              padWithZeros(milliseconds, 3);
     }
 
-    function padWithZeros(number, upTo) {
+    function padWithZeros (number, upTo) {
       var numberText = number.toString(),
           totalChars = numberText.length,
           zerosNeeded;
 
-      if(totalChars >= upTo) {
+      if (totalChars >= upTo) {
         return numberText;
       }
 
       zerosNeeded = upTo - totalChars;
 
-      for(var i = 0; i < zerosNeeded; i++) {
+      for (var i = 0; i < zerosNeeded; i++) {
         numberText = "0" + numberText;
       }
 
       return numberText;
     }
 
-    // connect buttons
-    document.getElementById("start-button").addEventListener("click", function() {
+    function onStart () {
       start();
-      if(!displayInterval) {
-        displayInterval = setInterval(function() {
-          displayNode.innerHTML = displayTime();
-        }, 25);
+
+      if (!displayInterval) {
+        displayInterval = setInterval(updateDisplay, 25);
       }
-    });
-    document.getElementById("stop-button").addEventListener("click", function() {
-      if(isRunning()) {
+    }
+
+    function updateDisplay () {
+      displayNode.innerHTML = displayTime();
+    }
+
+    function onStop () {
+      if (isRunning()) {
         stop();
-      } else {
+      }
+      else {
         reset();
+        updateDisplay();
+      }
+
+      if (!isNaN(displayInterval)) {
         clearInterval(displayInterval);
         displayInterval = null;
-        displayNode.innerHTML = displayTime();
       }
-    });
+    }
+
+    // connect buttons
+    document.getElementById("start-button").addEventListener("click", onStart);
+    document.getElementById("stop-button").addEventListener("click", onStop);
+
   </script>
 </body>
 </html>

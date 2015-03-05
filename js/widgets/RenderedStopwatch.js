@@ -5,11 +5,11 @@ define([
   "dojo/_base/declare"
 
 ], function (
-  RenderedStopwatchMixin, Stopwatch,
+  _RenderedStopwatchMixin, Stopwatch,
   declare
 ) {
 
-  return declare([Stopwatch, RenderedStopwatchMixin], {
+  return declare([Stopwatch, _RenderedStopwatchMixin], {
     declaredClass: "widgets.RenderedStopwatch",
 
     baseClass: "Stopwatch RenderedStopwatch"

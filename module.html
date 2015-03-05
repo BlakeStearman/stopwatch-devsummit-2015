@@ -19,32 +19,41 @@
 
   <script src="./js/stopwatch.js"></script>
   <script>
-    var displayInterval,
-        displayNode = document.getElementById("timer");
+    window.onload = function () {
+      var displayNode = document.getElementById("timer"),
+          displayInterval;
 
-    if(Stopwatch) {
-      // connect buttons
-      document.getElementById("start-button").addEventListener("click", function() {
+      function onStart () {
         Stopwatch.start();
-        if(!displayInterval) {
-          displayInterval = setInterval(function() {
-            displayNode.innerHTML = Stopwatch.displayTime();
-          }, 25);
+
+        if (!displayInterval) {
+          displayInterval = setInterval(updateDisplay, 25);
         }
-      });
-      document.getElementById("stop-button").addEventListener("click", function() {
-        if(Stopwatch.isRunning()) {
+      }
+
+      function updateDisplay () {
+        displayNode.innerHTML = Stopwatch.displayTime();
+      }
+
+      function onStop () {
+        if (Stopwatch.isRunning()) {
           Stopwatch.stop();
-        } else {
-          Stopwatch.reset();
-          if(displayInterval) {
-            clearInterval(displayInterval);
-            displayInterval = null;
-          }
-          displayNode.innerHTML = Stopwatch.displayTime();
         }
-      });
-    }
+        else {
+          Stopwatch.reset();
+          updateDisplay();
+        }
+
+        if (!isNaN(displayInterval)) {
+          clearInterval(displayInterval);
+          displayInterval = null;
+        }
+      }
+
+      // connect buttons
+      document.getElementById("start-button").addEventListener("click", onStart);
+      document.getElementById("stop-button").addEventListener("click", onStop);
+    };
   </script>
 </body>
 </html>
