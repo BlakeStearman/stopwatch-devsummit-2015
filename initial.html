@@ -18,102 +18,103 @@
   </div>
 
   <script>
-    var displayNode = document.getElementById("timer"),
-        startTime = 0,
-        stopTime = 0,
-        running = false,
-        displayInterval;
+    window.onload = function () {
+      var displayNode = document.getElementById("timer"),
+          startTime = 0,
+          stopTime = 0,
+          running = false,
+          displayInterval;
 
-    function isRunning () {
-      return running;
-    }
-
-    function reset () {
-      startTime = 0;
-      stopTime = 0;
-    }
-
-    function start () {
-      if (!isRunning()) {
-        running = true;
-        startTime = startTime + Date.now() - stopTime;
+      function isRunning() {
+        return running;
       }
-    }
 
-    function stop () {
-      if (isRunning()) {
-        running = false;
-        stopTime = Date.now();
+      function reset() {
+        startTime = 0;
+        stopTime = 0;
       }
-    }
 
-    function time () {
-      var finalTime = isRunning() ? Date.now() : stopTime;
-      return finalTime - startTime;
-    }
+      function start() {
+        if(!isRunning()) {
+          running = true;
+          startTime = startTime + Date.now() - stopTime;
+        }
+      }
 
-    function displayTime () {
-      var totalTime = time() || 0,
-          milliseconds = parseInt(totalTime % 1000),
-          seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
-          minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
-          hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
+      function stop() {
+        if(isRunning()) {
+          running = false;
+          stopTime = Date.now();
+        }
+      }
 
-      return padWithZeros(hours, 2) + ":" +
-             padWithZeros(minutes, 2) + ":" +
-             padWithZeros(seconds, 2) + ":" +
-             padWithZeros(milliseconds, 3);
-    }
+      function time() {
+        var finalTime = isRunning() ? Date.now() : stopTime;
+        return finalTime - startTime;
+      }
 
-    function padWithZeros (number, upTo) {
-      var numberText = number.toString(),
-          totalChars = numberText.length,
-          zerosNeeded;
+      function displayTime() {
+        var totalTime = time() || 0,
+            milliseconds = parseInt(totalTime % 1000),
+            seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
+            minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
+            hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
 
-      if (totalChars >= upTo) {
+        return padWithZeros(hours, 2) + ":" +
+            padWithZeros(minutes, 2) + ":" +
+            padWithZeros(seconds, 2) + ":" +
+            padWithZeros(milliseconds, 3);
+      }
+
+      function padWithZeros(number, upTo) {
+        var numberText = number.toString(),
+            totalChars = numberText.length,
+            zerosNeeded;
+
+        if(totalChars >= upTo) {
+          return numberText;
+        }
+
+        zerosNeeded = upTo - totalChars;
+
+        for(var i = 0; i < zerosNeeded; i++) {
+          numberText = "0" + numberText;
+        }
+
         return numberText;
       }
 
-      zerosNeeded = upTo - totalChars;
+      function onStart() {
+        start();
 
-      for (var i = 0; i < zerosNeeded; i++) {
-        numberText = "0" + numberText;
+        if(!displayInterval) {
+          displayInterval = setInterval(updateDisplay, 25);
+        }
       }
 
-      return numberText;
+      function updateDisplay() {
+        displayNode.innerHTML = displayTime();
+      }
+
+      function onStop() {
+        if(isRunning()) {
+          stop();
+        }
+        else {
+          reset();
+          updateDisplay();
+        }
+
+        if(!isNaN(displayInterval)) {
+          clearInterval(displayInterval);
+          displayInterval = null;
+        }
+      }
+
+      // connect buttons
+      document.getElementById("start-button").addEventListener("click", onStart);
+      document.getElementById("stop-button").addEventListener("click", onStop);
     }
-
-    function onStart () {
-      start();
-
-      if (!displayInterval) {
-        displayInterval = setInterval(updateDisplay, 25);
-      }
-    }
-
-    function updateDisplay () {
-      displayNode.innerHTML = displayTime();
-    }
-
-    function onStop () {
-      if (isRunning()) {
-        stop();
-      }
-      else {
-        reset();
-        updateDisplay();
-      }
-
-      if (!isNaN(displayInterval)) {
-        clearInterval(displayInterval);
-        displayInterval = null;
-      }
-    }
-
-    // connect buttons
-    document.getElementById("start-button").addEventListener("click", onStart);
-    document.getElementById("stop-button").addEventListener("click", onStop);
-
   </script>
 </body>
 </html>
