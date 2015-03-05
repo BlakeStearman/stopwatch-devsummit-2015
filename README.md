@@ -3,4 +3,4 @@ These demonstration files are resources of the Modular JavaScript session to be 
 
 ## License
 
-This software is provided under the MIT License. See this repositories [LICENSE.txt](https://github.com/BlakeStearman/stopwatch-devsummit-2015/edit/master/LICENSE.txt) file for the license information.
+This software is provided under the MIT License. See this repository's [LICENSE.txt](https://github.com/BlakeStearman/stopwatch-devsummit-2015/edit/master/LICENSE.txt) file for the license information.
