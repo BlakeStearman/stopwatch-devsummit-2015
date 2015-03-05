@@ -1,4 +1,4 @@
-var Stopwatch = (function() {
+var Stopwatch = (function () {
 
   // module data - private
   var _startTime = 0,
@@ -6,40 +6,36 @@ var Stopwatch = (function() {
       _running = false;
 
   // methods - private
-  function isRunning() {
+  function isRunning () {
     return _running;
   }
 
-  function reset() {
+  function reset () {
     _startTime = 0;
     _stopTime = 0;
   }
 
   // methods - public
-  function start() {
-    if(!_running) {
+  function start () {
+    if (!_running) {
       _running = true;
-
-      if(_startTime === 0) {
-        _startTime = Date.now();
-      }
+      _startTime = _startTime + Date.now() - _stopTime;
     }
   }
 
-  function stop() {
-    if(_running) {
+  function stop () {
+    if (_running) {
       _running = false;
       _stopTime = Date.now();
     }
   }
 
-  function _time() {
+  function _time () {
     var finalTime = _running ? Date.now() : _stopTime;
-
     return finalTime - _startTime;
   }
 
-  function displayTime() {
+  function displayTime () {
     var totalTime = _time(),
         milliseconds = totalTime % 1000,
         seconds = ((totalTime - milliseconds) / 1000) % 60,
@@ -52,7 +48,7 @@ var Stopwatch = (function() {
            _padWithZeros(milliseconds, 3);
   }
 
-  function _padWithZeros(number, upTo) {
+  function _padWithZeros (number, upTo) {
     var numberText = number.toString(),
         totalChars = numberText.length,
         zerosNeeded;

@@ -9,7 +9,7 @@ define([
   "dojo/on",
 
   "dojo/text!./templates/Stopwatch.html"
-], function(
+], function (
   _StopwatchMixin,
   _TemplatedMixin, _WidgetBase,
   declare, domAttr, on,
@@ -23,15 +23,16 @@ define([
     templateString: template,
 
     _displayInterval: null,
+    _defaultUpdateIntervalInMs: 25,
 
-    // ctor options
-    updateInterval: 25, // time in ms
+    // constructor options
+    updateIntervalInMs: null,
 
-    constructor: function(options) {
-      this.updateInterval = options.updateInterval || 25;
+    constructor: function (options) {
+      this.updateIntervalInMs = options.updateIntervalInMs || this._defaultUpdateIntervalInMs;
     },
 
-    postCreate: function() {
+    postCreate: function () {
       this.inherited(arguments);
 
       // connect button handlers
@@ -41,27 +42,30 @@ define([
       );
     },
 
-    _updateDisplay: function() {
-      domAttr.set(this._displayNode, "innerHTML", this.displayTime());
-    },
-
-    _onStart: function() {
+    _onStart: function () {
       this.start();
-      if(!this._displayInterval) {
+
+      if (!this._displayInterval) {
         this._displayInterval = setInterval(this._updateDisplay.bind(this));
       }
     },
 
-    _onStop: function() {
-      if(this.isRunning()) {
+    _updateDisplay: function () {
+      domAttr.set(this._displayNode, "innerHTML", this.displayTime());
+    },
+
+    _onStop: function () {
+      if (this.isRunning()) {
         this.stop();
-      } else {
+      }
+      else {
         this.reset();
-        if(this._displayInterval) {
-          clearInterval(this._displayInterval);
-          this._displayInterval = null;
-        }
         this._updateDisplay();
+      }
+
+      if (!isNaN(this._displayInterval)) {
+        clearInterval(this._displayInterval);
+        this._displayInterval = null;
       }
     }
   });

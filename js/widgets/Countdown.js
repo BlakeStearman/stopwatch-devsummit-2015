@@ -5,7 +5,6 @@ define([
   "dijit/_WidgetBase",
 
   "dojo/_base/declare",
-  "dojo/dom",
   "dojo/dom-attr",
   "dojo/dom-class",
   "dojo/dom-style",
@@ -15,7 +14,7 @@ define([
 ], function(
   _StopwatchMixin,
   _TemplatedMixin, _WidgetBase,
-  declare, dom, domAttr, domClass, domStyle, on,
+  declare, domAttr, domClass, domStyle, on,
   template
 ) {
 
@@ -26,20 +25,21 @@ define([
     templateString: template,
 
     _displayInterval: null,
-    _defaultTime: 10,
+    _defaultTimeInSec: 10,
+    _defaultUpdateIntervalInMs: 100,
     _isReset: true,
 
-    // ctor options
-    goalTime: 10,        // time in s
-    updateInterval: 100, // time in ms
+    // constructor options
+    goalTimeInSec: null,
+    updateIntervalInMs: null,
 
-    constructor: function(options) {
+    constructor: function (options) {
       // ensure proper types
-      this.goalTime = parseInt(options.goalTime) || this._defaultTime; // default to 10 seconds
-      this.updateInterval = parseInt(options.updateInterval) || 100;   // default to 100 ms
+      this.goalTimeInSec = parseInt(options.goalTimeInSec) || this._defaultTimeInSec;
+      this.updateIntervalInMs = parseInt(options.updateIntervalInMs) || this._defaultUpdateIntervalInMs;
     },
 
-    postCreate: function() {
+    postCreate: function () {
       this.inherited(arguments);
 
       // connect button handlers
@@ -48,84 +48,88 @@ define([
       );
     },
 
-    startup: function() {
+    startup: function () {
       this.inherited(arguments);
+
       // ensure goal time displayed
       this._updateDisplay();
     },
 
-    displayTime: function() {
-      // calculate seconds left
-      return Math.round(this.goalTime - (this.rawTime() / 1000));
+    displayTime: function () {
+      return this._secondsLeft();
     },
 
-    reset: function() {
-      // ensure superclass work is done
+    _secondsLeft: function () {
+      return Math.round(this.goalTimeInSec - (this.rawTime() / 1000));
+    },
+
+    reset: function () {
       this.inherited(arguments);
 
       // reset alarm state
-      domClass.remove(dom.byId("timer"), "alarm");
-      domClass.remove(dom.byId("countdown-button"), "alarm");
+      domClass.remove("timer", "alarm");
+      domClass.remove("countdown-button", "alarm");
     },
 
-    _setGoalTimeAttr: function(goalTime) {
+    _setGoalTimeAttr: function (goalTime) {
       // use default if goalTime 0 or not set
-      this.goalTime = parseInt(goalTime) || this._defaultTime;
+      this.goalTimeInSec = parseInt(goalTime) || this._defaultTimeInSec;
     },
 
-    _updateDisplay: function() {
+    _updateDisplay: function () {
       var timeLeft = this.displayTime();
-      if(timeLeft <= 0) {
+
+      if (timeLeft <= 0) {
         timeLeft = 0;
 
         // set alarm state
-        domClass.add(dom.byId("timer"), "alarm");
-        domClass.add(dom.byId("countdown-button"), "alarm");
+        domClass.add("timer", "alarm");
+        domClass.add("countdown-button", "alarm");
 
-        // stop countdown
         this._stopCountdown();
       }
 
       domAttr.set(this._displayNode, "innerHTML", timeLeft);
     },
 
-    _startCountdown: function() {
-      // start countdown
+    _startCountdown: function () {
       this.start();
-      domStyle.set(dom.byId("countdown-button"), "visibility", "hidden");
-      if(!this._displayInterval) {
+      domStyle.set("countdown-button", "visibility", "hidden");
+      if (!this._displayInterval) {
         this._displayInterval = setInterval(this._updateDisplay.bind(this));
       }
     },
 
-    _stopCountdown: function() {
-      // stop countdown
+    _stopCountdown: function () {
       this.stop();
-      domAttr.set(dom.byId("countdown-button"), "innerHTML", "Reset");
-      domStyle.set(dom.byId("countdown-button"), "visibility", "visible");
+      domAttr.set("countdown-button", "innerHTML", "Reset");
+      domStyle.set("countdown-button", "visibility", "visible");
     },
 
-    _resetCountdown: function() {
-      // reset countdown
+    _resetCountdown: function () {
       this.reset();
-      domAttr.set(dom.byId("countdown-button"), "innerHTML", "Start");
-      if(this._displayInterval) {
+      this._updateDisplay();
+      this._isReset = true;
+
+      domAttr.set("countdown-button", "innerHTML", "Start");
+
+      if (!isNaN(this._displayInterval)) {
         clearInterval(this._displayInterval);
         this._displayInterval = null;
       }
-      this._updateDisplay();
-      this._isReset = true;
     },
 
-    _countdownClicked: function() {
-      if(this._isReset) {
-        if(this.isRunning()) {
+    _countdownClicked: function () {
+      if (this._isReset) {
+        if (this.isRunning()) {
           this._stopCountdown();
-        } else {
+        }
+        else {
           this._startCountdown();
         }
         this._isReset = false;
-      } else {
+      }
+      else {
         this._resetCountdown();
       }
     }
