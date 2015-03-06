@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="nav">
-    <a href="./index.html">&lt; Back</a> | Stopwatch script
+    <a  class="hoverHighlight" href="./index.html">&lt; Back</a> | Stopwatch script
   </div>
 
   <div class="display">
@@ -18,103 +18,101 @@
   </div>
 
   <script>
-    window.onload = function () {
-      var displayNode = document.getElementById("timer"),
-          startTime = 0,
-          stopTime = 0,
-          running = false,
-          displayInterval;
+    var displayNode = document.getElementById("timer"),
+        startTime = 0,
+        stopTime = 0,
+        running = false,
+        displayInterval;
 
-      function isRunning() {
-        return running;
+    function isRunning() {
+      return running;
+    }
+
+    function reset() {
+      startTime = 0;
+      stopTime = 0;
+    }
+
+    function start() {
+      if(!isRunning()) {
+        running = true;
+        startTime = startTime + Date.now() - stopTime;
       }
+    }
 
-      function reset() {
-        startTime = 0;
-        stopTime = 0;
+    function stop() {
+      if(isRunning()) {
+        running = false;
+        stopTime = Date.now();
       }
+    }
 
-      function start() {
-        if(!isRunning()) {
-          running = true;
-          startTime = startTime + Date.now() - stopTime;
-        }
-      }
+    function time() {
+      var finalTime = isRunning() ? Date.now() : stopTime;
+      return finalTime - startTime;
+    }
 
-      function stop() {
-        if(isRunning()) {
-          running = false;
-          stopTime = Date.now();
-        }
-      }
+    function displayTime() {
+      var totalTime = time() || 0,
+          milliseconds = parseInt(totalTime % 1000),
+          seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
+          minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
+          hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
 
-      function time() {
-        var finalTime = isRunning() ? Date.now() : stopTime;
-        return finalTime - startTime;
-      }
+      return padWithZeros(hours, 2) + ":" +
+          padWithZeros(minutes, 2) + ":" +
+          padWithZeros(seconds, 2) + ":" +
+          padWithZeros(milliseconds, 3);
+    }
 
-      function displayTime() {
-        var totalTime = time() || 0,
-            milliseconds = parseInt(totalTime % 1000),
-            seconds = parseInt(((totalTime - milliseconds) / 1000) % 60),
-            minutes = parseInt(((((totalTime - milliseconds) / 1000) - seconds) / 60) % 60),
-            hours = parseInt(((((((totalTime - milliseconds) / 1000) - seconds) / 60) - minutes) / 60) % 24);
+    function padWithZeros(number, upTo) {
+      var numberText = number.toString(),
+          totalChars = numberText.length,
+          zerosNeeded;
 
-        return padWithZeros(hours, 2) + ":" +
-            padWithZeros(minutes, 2) + ":" +
-            padWithZeros(seconds, 2) + ":" +
-            padWithZeros(milliseconds, 3);
-      }
-
-      function padWithZeros(number, upTo) {
-        var numberText = number.toString(),
-            totalChars = numberText.length,
-            zerosNeeded;
-
-        if(totalChars >= upTo) {
-          return numberText;
-        }
-
-        zerosNeeded = upTo - totalChars;
-
-        for(var i = 0; i < zerosNeeded; i++) {
-          numberText = "0" + numberText;
-        }
-
+      if(totalChars >= upTo) {
         return numberText;
       }
 
-      function onStart() {
-        start();
+      zerosNeeded = upTo - totalChars;
 
-        if(!displayInterval) {
-          displayInterval = setInterval(updateDisplay, 25);
-        }
+      for(var i = 0; i < zerosNeeded; i++) {
+        numberText = "0" + numberText;
       }
 
-      function updateDisplay() {
-        displayNode.innerHTML = displayTime();
-      }
-
-      function onStop() {
-        if(isRunning()) {
-          stop();
-        }
-        else {
-          reset();
-          updateDisplay();
-        }
-
-        if(!isNaN(displayInterval)) {
-          clearInterval(displayInterval);
-          displayInterval = null;
-        }
-      }
-
-      // connect buttons
-      document.getElementById("start-button").addEventListener("click", onStart);
-      document.getElementById("stop-button").addEventListener("click", onStop);
+      return numberText;
     }
+
+    function onStart() {
+      start();
+
+      if(!displayInterval) {
+        displayInterval = setInterval(updateDisplay, 25);
+      }
+    }
+
+    function updateDisplay() {
+      displayNode.innerHTML = displayTime();
+    }
+
+    function onStop() {
+      if(isRunning()) {
+        stop();
+      }
+      else {
+        reset();
+        updateDisplay();
+      }
+
+      if(!isNaN(displayInterval)) {
+        clearInterval(displayInterval);
+        displayInterval = null;
+      }
+    }
+
+    // connect buttons
+    document.getElementById("start-button").addEventListener("click", onStart);
+    document.getElementById("stop-button").addEventListener("click", onStop);
   </script>
 </body>
 </html>

@@ -1,0 +1,43 @@
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
+html {
+  display: table;
+  height: 100%;
+  width: 100%;
+  font-family: "Lato", sans-serif;
+}
+
+body {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+button {
+  font-family: inherit;
+}
+
+.nav {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  color: #555;
+}
+
+.nav a {
+  font-size: 12pt;
+  color: #555;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: #FF8C00;
+}
+
+.hoverHighlight {
+  opacity: 0.25;
+  transition: color .3s, opacity 0.15s;
+}
+
+.hoverHighlight:hover {
+  opacity: 1;
+}
