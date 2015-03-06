@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>Countdown</title>
 
-  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dijit/themes/claro/claro.css">
-  <link rel="stylesheet" href="./css/app-widget.css">
-  <link rel="stylesheet" href="js/widgets/css/Countdown.css">
+  <link rel="stylesheet" href="./css/app-countdown.css">
+  <link rel="stylesheet" href="./css/fireworks.css">
+  <link rel="stylesheet" href="./js/widgets/css/Countdown.css">
 
   <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dojo/dojo.js"
           data-dojo-config="
@@ -21,12 +21,64 @@
     <a class="hoverHighlight" href="./index.html">&lt; Back</a> | Countdown
   </div>
 
-  <div class="display" id="countdown" data-dojo-type="widgets/Countdown" data-dojo-props="goalTime:10"></div>
+  <div id="countdown"></div>
 
+  <aside id="library">
+    <img src="./imgs/big-glow.png" id="big-glow" />
+    <img src="./imgs/small-glow.png" id="small-glow" />
+  </aside>
+  <script src="js/requestanimframe.js"></script>
+  <script src="js/fireworks.js"></script>
   <script>
-    require(["dojo/parser", "widgets/Countdown", "dojo/domReady!"], function(parser) {
+    require([
+      "dojo/parser",
+      "dojo/dom-construct",
+      "dojo/dom-style",
+      "widgets/Countdown",
+      "dojo/domReady!"
+    ], function(parser, domConstruct, domStyle, Countdown) {
       parser.parse();
+
+      // create countdown and startup
+      var countdown = new Countdown({
+        goalTime: 10
+      }, domConstruct.create("div", {className: "display"}, "countdown"));
+      countdown.startup();
+
+      function startDemo() {
+        // start countdown after a pause
+        setTimeout(function() {
+          countdown.startCountdown();
+        }, 1000);
+      }
+
+      function resetDemo() {
+        // restart countdown after a pause
+        setTimeout(function() {
+          countdown.resetCountdown();
+          startDemo();
+        }, 3000);
+      }
+
+      // react to launch event
+      countdown.on("launch", function() {
+        // launch fireworks
+        for(var i = 0; i < 10; i++) {
+          document.dispatchEvent(new MouseEvent("mouseup", {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+            target: window
+          }));
+        }
+
+        resetDemo();
+      });
+
+      startDemo();
     });
   </script>
+
+
 </body>
 </html>

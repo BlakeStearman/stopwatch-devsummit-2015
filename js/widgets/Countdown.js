@@ -3,6 +3,7 @@ define([
 
   "dijit/_TemplatedMixin",
   "dijit/_WidgetBase",
+  "dojo/Evented",
 
   "dojo/_base/declare",
   "dojo/dom-attr",
@@ -13,12 +14,12 @@ define([
   "dojo/text!./templates/Countdown.html"
 ], function(
   _StopwatchMixin,
-  _TemplatedMixin, _WidgetBase,
+  _TemplatedMixin, _WidgetBase, Evented,
   declare, domAttr, domClass, domStyle, on,
   template
 ) {
 
-  return declare([_WidgetBase, _TemplatedMixin, _StopwatchMixin], {
+  return declare([_WidgetBase, _TemplatedMixin, _StopwatchMixin, Evented], {
 
     declaredClass: "widgets.Countdown",
     baseClass: "Countdown",
@@ -41,11 +42,6 @@ define([
 
     postCreate: function () {
       this.inherited(arguments);
-
-      // connect button handlers
-      this.own(
-        on(this._countdownButton, "click", this._countdownClicked.bind(this))
-      );
     },
 
     startup: function () {
@@ -68,7 +64,6 @@ define([
 
       // reset alarm state
       domClass.remove("timer", "alarm");
-      domClass.remove("countdown-button", "alarm");
     },
 
     _setGoalTimeAttr: function (goalTime) {
@@ -84,53 +79,35 @@ define([
 
         // set alarm state
         domClass.add("timer", "alarm");
-        domClass.add("countdown-button", "alarm");
 
-        this._stopCountdown();
+        if(this.isRunning()) {
+          this.emit("launch");
+        }
+
+        this.stopCountdown();
       }
 
       domAttr.set(this._displayNode, "innerHTML", timeLeft);
     },
 
-    _startCountdown: function () {
+    startCountdown: function () {
       this.start();
-      domStyle.set("countdown-button", "visibility", "hidden");
       if (!this._displayInterval) {
         this._displayInterval = setInterval(this._updateDisplay.bind(this));
       }
     },
 
-    _stopCountdown: function () {
+    stopCountdown: function () {
       this.stop();
-      domAttr.set("countdown-button", "innerHTML", "Reset");
-      domStyle.set("countdown-button", "visibility", "visible");
     },
 
-    _resetCountdown: function () {
+    resetCountdown: function () {
       this.reset();
       this._updateDisplay();
-      this._isReset = true;
-
-      domAttr.set("countdown-button", "innerHTML", "Start");
 
       if (!isNaN(this._displayInterval)) {
         clearInterval(this._displayInterval);
         this._displayInterval = null;
-      }
-    },
-
-    _countdownClicked: function () {
-      if (this._isReset) {
-        if (this.isRunning()) {
-          this._stopCountdown();
-        }
-        else {
-          this._startCountdown();
-        }
-        this._isReset = false;
-      }
-      else {
-        this._resetCountdown();
       }
     }
   });

@@ -1,35 +1,8 @@
 .Countdown #timer {
   font-size: 48pt;
-  color: #555;
+  color: #999;
 }
 
 .Countdown #timer.alarm {
   color: darkred;
-}
-
-.Countdown button {
-  cursor: pointer;
-  background-color: transparent;
-  color: #555;
-  border: 0.25em solid #999;
-  border-radius: 1em;
-  outline: none;
-  padding: 0.5em 0.5em;
-  font-size: 16pt;
-  min-width: 100px;
-}
-
-.Countdown button.alarm {
-  color: darkred;
-  border-color: darkred;
-}
-
-.Countdown button:hover {
-  color: #333;
-  border-color: #333;
-}
-
-.Countdown button:active {
-  color: #999;
-  border-color: #999;
 }

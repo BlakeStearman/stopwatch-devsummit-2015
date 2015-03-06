@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="./css/app-widget.css">
   <link rel="stylesheet" href="./js/widgets/css/Stopwatch.css">
+  <link rel="stylesheet" href="./js/widgets/css/StylizedStopwatch.css">
 
   <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dojo/dojo.js"
           data-dojo-config="
@@ -13,17 +14,18 @@
             packages: [{
               name: 'widgets',
               location: location.pathname.replace(/\/[^/]+$/, '') + '/js/widgets'
-            }]"></script>
+            }]">
+  </script>
 </head>
 <body>
   <div class="nav">
-    <a class="hoverHighlight" href="./index.html">&lt; Back</a> | Stopwatch Dojo widget
+    <a class="hoverHighlight" href="./index.html">&lt; Back</a> | Stylized Stopwatch
   </div>
 
-  <div class="display" id="stopwatch" data-dojo-type="widgets/Stopwatch"></div>
+  <div class="display" id="stopwatch" data-dojo-type="widgets/StylizedStopwatch"></div>
 
   <script>
-    require(["dojo/parser", "widgets/Stopwatch", "dojo/domReady!"], function(parser) {
+    require(["dojo/parser", "widgets/StylizedStopwatch", "dojo/domReady!"], function(parser) {
       parser.parse();
     });
   </script>

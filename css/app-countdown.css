@@ -1,0 +1,25 @@
+@import url(common.css);
+
+.display {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 48pt;
+  color: #555;
+}
+
+.nav {
+  z-index: 100;
+}
+.nav a {
+  color: #fff;
+}
+
+#countdown {
+  position: absolute;
+  top: 0.25em;
+  right: 1em;
+  z-index: 100;
+}
