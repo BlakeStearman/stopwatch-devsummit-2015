@@ -1,4 +1,0 @@
-[submodule "fireworks"]
-	path = lib/fireworks
-	url = https://github.com/paullewis/Fireworks
-	branch = master
