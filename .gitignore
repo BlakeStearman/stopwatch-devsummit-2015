@@ -1,0 +1,11 @@
+.DS_Store
+*~
+
+#ignore .project file
+.project
+
+#ignore .settings directory
+.settings/
+
+#ignore .idea directory
+.idea/

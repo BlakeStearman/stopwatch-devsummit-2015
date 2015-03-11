@@ -24,46 +24,37 @@
   <div id="countdown"></div>
 
   <aside id="library">
-    <img src="./imgs/big-glow.png" id="big-glow" />
-    <img src="./imgs/small-glow.png" id="small-glow" />
+    <img src="lib/fireworks/images/big-glow.png" id="big-glow" />
+    <img src="lib/fireworks/images/small-glow.png" id="small-glow" />
   </aside>
-  <script src="js/requestanimframe.js"></script>
-  <script src="js/fireworks.js"></script>
+  <script src="lib/fireworks/js/requestanimframe.js"></script>
+  <script src="lib/fireworks/js/fireworks.js"></script>
   <script>
     require([
-      "dojo/parser",
-      "dojo/dom-construct",
-      "dojo/dom-style",
       "widgets/Countdown",
       "dojo/domReady!"
-    ], function(parser, domConstruct, domStyle, Countdown) {
-      parser.parse();
+    ], function(Countdown) {
 
-      // create countdown and startup
       var countdown = new Countdown({
         goalTime: 5 // seconds
-      }, domConstruct.create("div", {className: "display"}, "countdown"));
+      }, "countdown");
+
       countdown.startup();
 
-      function startDemo() {
-        // start countdown after a pause
-        setTimeout(function() {
-          countdown.startCountdown();
-        }, 1000);
-      }
+      startDemo();
 
-      function resetDemo() {
-        // restart countdown after a pause
-        setTimeout(function() {
-          countdown.resetCountdown();
-          startDemo();
-        }, 3000);
+      function startDemo () {
+        countdown.startCountdown();
       }
 
       // react to launch event
-      countdown.on("launch", function() {
-        // launch fireworks
-        for(var i = 0; i < 10; i++) {
+      countdown.on("launch", function () {
+        launchFireworks();
+        resetDemo();
+      });
+
+      function launchFireworks () {
+        for (var i = 0; i < 10; i++) {
           document.dispatchEvent(new MouseEvent("mouseup", {
             bubbles: true,
             cancelable: true,
@@ -71,11 +62,15 @@
             target: window
           }));
         }
+      }
 
-        resetDemo();
-      });
-
-      startDemo();
+      function resetDemo () {
+        // restart countdown after a pause
+        setTimeout(function () {
+          countdown.resetCountdown();
+          startDemo();
+        }, 3000);
+      }
     });
   </script>
 

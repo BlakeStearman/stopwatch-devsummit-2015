@@ -9,7 +9,8 @@ define([
   "dojo/on",
 
   "dojo/text!./templates/Stopwatch.html"
-], function (
+],
+function (
   _StopwatchMixin,
   _TemplatedMixin, _WidgetBase,
   declare, domAttr, on,
@@ -46,7 +47,7 @@ define([
       this.start();
 
       if (!this._displayInterval) {
-        this._displayInterval = setInterval(this._updateDisplay.bind(this));
+        this._displayInterval = setInterval(this._updateDisplay.bind(this), this.updateIntervalInMs);
       }
     },
 

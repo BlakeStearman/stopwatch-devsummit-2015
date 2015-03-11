@@ -1,0 +1,4 @@
+[submodule "fireworks"]
+	path = stopwatch/lib/fireworks
+	url = https://github.com/paullewis/Fireworks
+	branch = master

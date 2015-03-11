@@ -3,15 +3,14 @@ define([
   "./Stopwatch",
 
   "dojo/_base/declare"
-
-], function (
+],
+function (
   _StylizedStopwatchMixin, Stopwatch,
   declare
 ) {
 
   return declare([Stopwatch, _StylizedStopwatchMixin], {
     declaredClass: "widgets.StylizedStopwatch",
-
     baseClass: "Stopwatch StylizedStopwatch"
   });
 

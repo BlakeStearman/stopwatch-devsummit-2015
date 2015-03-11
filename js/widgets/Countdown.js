@@ -3,19 +3,18 @@ define([
 
   "dijit/_TemplatedMixin",
   "dijit/_WidgetBase",
-  "dojo/Evented",
 
   "dojo/_base/declare",
   "dojo/dom-attr",
   "dojo/dom-class",
-  "dojo/dom-style",
-  "dojo/on",
+  "dojo/Evented",
 
   "dojo/text!./templates/Countdown.html"
-], function(
+],
+function (
   _StopwatchMixin,
-  _TemplatedMixin, _WidgetBase, Evented,
-  declare, domAttr, domClass, domStyle, on,
+  _TemplatedMixin, _WidgetBase,
+  declare, domAttr, domClass, Evented,
   template
 ) {
 
@@ -27,7 +26,7 @@ define([
 
     _displayInterval: null,
     _defaultTimeInSec: 10,
-    _defaultUpdateIntervalInMs: 100,
+    _defaultUpdateIntervalInMs: 1000,
     _isReset: true,
 
     // constructor options
@@ -38,10 +37,6 @@ define([
       // ensure proper types
       this.goalTimeInSec = parseInt(options.goalTimeInSec) || this._defaultTimeInSec;
       this.updateIntervalInMs = parseInt(options.updateIntervalInMs) || this._defaultUpdateIntervalInMs;
-    },
-
-    postCreate: function () {
-      this.inherited(arguments);
     },
 
     startup: function () {
@@ -93,7 +88,7 @@ define([
     startCountdown: function () {
       this.start();
       if (!this._displayInterval) {
-        this._displayInterval = setInterval(this._updateDisplay.bind(this));
+        this._displayInterval = setInterval(this._updateDisplay.bind(this), this.updateIntervalInMs);
       }
     },
 
