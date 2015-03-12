@@ -1,5 +1,8 @@
 # Stopwatch Demo Code
-These demonstration files are resources of the Modular JavaScript session to be presented at Esri International Developers Summit, 2015.
+These demonstration files are resources of the Modular JavaScript session that was presented at Esri International Developers Summit, 2015 on Wednesday, 3/11.
+
+## Slides
+The slides are available via Dropbox at the following location: http://bit.ly/1BvBPgp
 
 ## License
 This software is provided under the MIT License. See this repository's [LICENSE.txt](https://github.com/BlakeStearman/stopwatch-devsummit-2015/edit/master/LICENSE.txt) file for the license information.
