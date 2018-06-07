@@ -1,6 +1,9 @@
 # Stopwatch Demo Code
 These demonstration files are resources of the Modular JavaScript session that was presented at Esri International Developers Summit, 2015 on Wednesday, 3/11.
 
+## Demo
+The demo can be accessed here: http://blakestearman.github.io/stopwatch-devsummit-2015/
+
 ## Slides
 The slides are available via Dropbox at the following location: http://bit.ly/1BvBPgp
 
